@@ -3,15 +3,18 @@ package helper.csv;
 import exception.csv.forex.CurrencyParsingException;
 import exception.csv.forex.ForexValueParsingException;
 import helper.Constants;
+import helper.csv.converter.ClientConverter;
 import helper.csv.converter.ForexConverter;
 import model.forex.Currency;
 import model.forex.ForexWrapper;
+import model.product.ProductWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,6 +24,7 @@ class KataCSVReaderTest {
 	private static final String FOREX_CSV_PATH = Constants.TEST_RESOURCES_PATH + Constants.FOREX_CSV;
 	private static final String INCORRECT_CURRENCY_CSV_PATH = Constants.TEST_RESOURCES_PATH + "/IncorrectCurrencyForex.csv";
 	private static final String INCORRECT_CONVERSION_VALUE_CSV_PATH = Constants.TEST_RESOURCES_PATH + "/IncorrectValueForex.csv";
+	private static final String PRODUCT_CSV_PATH = Constants.TEST_RESOURCES_PATH + Constants.PRODUCT_CSV;
 
 	@Test
 	void parse_forex_correctly() throws IOException {
@@ -49,5 +53,15 @@ class KataCSVReaderTest {
 		KataCSVReader kataCSVReader = new KataCSVReader(INCORRECT_CONVERSION_VALUE_CSV_PATH, new ForexConverter());
 
 		assertThrows(ForexValueParsingException.class, kataCSVReader::read);
+	}
+
+	@Test
+	void parse_clients_correctly() throws IOException {
+		KataCSVReader kataCSVReader = new KataCSVReader(PRODUCT_CSV_PATH, new ClientConverter());
+
+		ProductWrapper results = (ProductWrapper) kataCSVReader.read();
+
+		assertNotNull(results);
+		assertNotEquals(0, results.getClients().size());
 	}
 }
