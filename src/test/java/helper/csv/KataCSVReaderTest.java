@@ -1,6 +1,6 @@
 package helper.csv;
 
-import exception.csv.CSVParsingException;
+import exception.csv.ForexParsingException;
 import helper.Constants;
 import helper.csv.converter.ForexConverter;
 import model.forex.Currency;
@@ -39,6 +39,6 @@ class KataCSVReaderTest {
 	void read_incorrect_currency() {
 		KataCSVReader kataCSVReader = new KataCSVReader(INCORRECT_CURRENCY_CSV_PATH, new ForexConverter());
 
-		assertThrows(CSVParsingException.class, kataCSVReader::read);
+		assertThrows(ForexParsingException.class, kataCSVReader::read);
 	}
 }

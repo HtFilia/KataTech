@@ -13,8 +13,8 @@ public class ForexConverter implements IKataConverter {
 	public ForexWrapper convert(List<String[]> lines) {
 		Map<Pair<Currency, Currency>, Double> conversions = new HashMap<>(lines.size());
 		for (String[] line : lines) {
-			Currency from = Currency.valueOf(line[0]);
-			Currency to = Currency.valueOf(line[1]);
+			Currency from = Currency.from(line[0]);
+			Currency to = Currency.from(line[1]);
 			Double fx = forexFromString(line[2]);
 			conversions.put(Pair.of(from, to), fx);
 		}
