@@ -1,4 +1,4 @@
-package helper.csv.converter;
+package model;
 
 public abstract class KataObject {
 }

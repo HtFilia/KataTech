@@ -1,4 +1,4 @@
-package model;
+package model.forex;
 
 public enum Currency {
 	EUR,
