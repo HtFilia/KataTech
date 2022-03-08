@@ -30,7 +30,7 @@ class KataCSVReaderTest {
 
 		assertNotNull(results);
 		Pair<Currency, Currency> expectedEURUSD = Pair.of(Currency.EUR, Currency.USD);
-		Pair<Currency, Currency> expectedEURJPY = Pair.of(Currency.EUR, Currency.JPY);
+		Pair<Currency, Currency> expectedEURJPY = Pair.of(Currency.JPY, Currency.EUR);
 		assertTrue(results.getConversions().containsKey(expectedEURUSD));
 		assertTrue(results.getConversions().containsKey(expectedEURJPY));
 		assertEquals(2, results.getConversions().get(expectedEURUSD));
