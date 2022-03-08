@@ -1,6 +1,7 @@
 package helper.csv;
 
-import exception.csv.ForexParsingException;
+import exception.csv.forex.CurrencyParsingException;
+import exception.csv.forex.ForexValueParsingException;
 import helper.Constants;
 import helper.csv.converter.ForexConverter;
 import model.forex.Currency;
@@ -19,9 +20,10 @@ class KataCSVReaderTest {
 
 	private static final String FOREX_CSV_PATH = Constants.TEST_RESOURCES_PATH + Constants.FOREX_CSV;
 	private static final String INCORRECT_CURRENCY_CSV_PATH = Constants.TEST_RESOURCES_PATH + "/IncorrectCurrencyForex.csv";
+	private static final String INCORRECT_CONVERSION_VALUE_CSV_PATH = Constants.TEST_RESOURCES_PATH + "/IncorrectValueForex.csv";
 
 	@Test
-	void read_forex_correctly() throws IOException {
+	void parse_forex_correctly() throws IOException {
 		KataCSVReader kataCSVReader = new KataCSVReader(FOREX_CSV_PATH, new ForexConverter());
 
 		ForexWrapper results = (ForexWrapper) kataCSVReader.read();
@@ -36,9 +38,16 @@ class KataCSVReaderTest {
 	}
 
 	@Test
-	void read_incorrect_currency() {
+	void try_parsing_incorrect_currency() {
 		KataCSVReader kataCSVReader = new KataCSVReader(INCORRECT_CURRENCY_CSV_PATH, new ForexConverter());
 
-		assertThrows(ForexParsingException.class, kataCSVReader::read);
+		assertThrows(CurrencyParsingException.class, kataCSVReader::read);
+	}
+
+	@Test
+	void try_parsing_incorrect_conversion_value() {
+		KataCSVReader kataCSVReader = new KataCSVReader(INCORRECT_CONVERSION_VALUE_CSV_PATH, new ForexConverter());
+
+		assertThrows(ForexValueParsingException.class, kataCSVReader::read);
 	}
 }

@@ -1,11 +1,12 @@
-package exception.csv;
+package exception.csv.forex;
 
+import exception.csv.CSVParsingException;
 import lombok.AllArgsConstructor;
 
 import java.io.Serial;
 
 @AllArgsConstructor
-public class ForexParsingException extends CSVParsingException {
+public class CurrencyParsingException extends CSVParsingException {
 	@Serial
 	private static final long serialVersionUID = 6471121645696681844L;
 

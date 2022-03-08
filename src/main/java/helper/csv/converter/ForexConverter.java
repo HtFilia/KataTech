@@ -1,5 +1,6 @@
 package helper.csv.converter;
 
+import exception.csv.forex.ForexValueParsingException;
 import model.forex.Currency;
 import model.forex.ForexWrapper;
 import org.apache.commons.lang3.tuple.Pair;
@@ -22,6 +23,10 @@ public class ForexConverter implements IKataConverter {
 	}
 
 	private Double forexFromString(String forex) {
-		return Double.valueOf(forex.replace("\"", "").replace(",", "."));
+		try {
+			return Double.valueOf(forex.replace("\"", "").replace(",", "."));
+		} catch (NumberFormatException ex) {
+			throw new ForexValueParsingException(forex);
+		}
 	}
 }

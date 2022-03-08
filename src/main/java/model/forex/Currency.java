@@ -1,6 +1,6 @@
 package model.forex;
 
-import exception.csv.ForexParsingException;
+import exception.csv.forex.CurrencyParsingException;
 
 public enum Currency {
 	EUR,
@@ -14,7 +14,7 @@ public enum Currency {
 		try {
 			return Currency.valueOf(currency);
 		} catch (IllegalArgumentException ex) {
-			throw new ForexParsingException(currency);
+			throw new CurrencyParsingException(currency);
 		}
 	}
 }
