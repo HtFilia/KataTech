@@ -4,9 +4,11 @@ import exception.csv.forex.CurrencyParsingException;
 import exception.csv.forex.ForexValueParsingException;
 import helper.Constants;
 import helper.csv.converter.ForexConverter;
+import helper.csv.converter.PriceConverter;
 import helper.csv.converter.ProductConverter;
 import model.forex.Currency;
 import model.forex.ForexWrapper;
+import model.price.PriceWrapper;
 import model.product.Client;
 import model.product.Product;
 import model.product.ProductWrapper;
@@ -26,6 +28,7 @@ class KataCSVReaderTest {
 	private static final String INCORRECT_CURRENCY_CSV_PATH = Constants.TEST_RESOURCES_PATH + "/IncorrectCurrencyForex.csv";
 	private static final String INCORRECT_CONVERSION_VALUE_CSV_PATH = Constants.TEST_RESOURCES_PATH + "/IncorrectValueForex.csv";
 	private static final String PRODUCT_CSV_PATH = Constants.TEST_RESOURCES_PATH + Constants.PRODUCT_CSV;
+	private static final String PRICE_CSV_PATH = Constants.TEST_RESOURCES_PATH + Constants.PRICES_CSV;
 
 	@Test
 	void parse_forex_correctly() throws IOException {
@@ -75,5 +78,14 @@ class KataCSVReaderTest {
 		assertTrue(results.clients().get(expectedClient).containsKey(secondExpectedProduct));
 		assertEquals(30, results.clients().get(expectedClient).get(firstExpectedProduct));
 		assertEquals(80, results.clients().get(expectedClient).get(secondExpectedProduct));
+	}
+
+	@Test
+	void parse_prices_correctly() throws IOException {
+		KataCSVReader kataCSVReader = new KataCSVReader(PRICE_CSV_PATH, new PriceConverter());
+
+		PriceWrapper results = (PriceWrapper) kataCSVReader.read();
+
+		assertNotNull(results);
 	}
 }
