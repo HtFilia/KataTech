@@ -46,14 +46,16 @@ class KataCSVReaderTest {
 	void try_parsing_incorrect_currency() {
 		KataCSVReader kataCSVReader = new KataCSVReader(INCORRECT_CURRENCY_CSV_PATH, new ForexConverter());
 
-		assertThrows(CurrencyParsingException.class, kataCSVReader::read);
+		Throwable exception = assertThrows(CurrencyParsingException.class, kataCSVReader::read);
+		assertEquals("INC is not a supported currency.", exception.getMessage());
 	}
 
 	@Test
 	void try_parsing_incorrect_conversion_value() {
 		KataCSVReader kataCSVReader = new KataCSVReader(INCORRECT_CONVERSION_VALUE_CSV_PATH, new ForexConverter());
 
-		assertThrows(ForexValueParsingException.class, kataCSVReader::read);
+		Throwable exception = assertThrows(ForexValueParsingException.class, kataCSVReader::read);
+		assertEquals("0,1,1 is not a correct FX spot.", exception.getMessage());
 	}
 
 	@Test
