@@ -3,10 +3,12 @@ package helper.csv;
 import exception.csv.forex.CurrencyParsingException;
 import exception.csv.forex.ForexValueParsingException;
 import helper.Constants;
-import helper.csv.converter.ClientConverter;
 import helper.csv.converter.ForexConverter;
+import helper.csv.converter.ProductConverter;
 import model.forex.Currency;
 import model.forex.ForexWrapper;
+import model.product.Client;
+import model.product.Product;
 import model.product.ProductWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,10 +36,10 @@ class KataCSVReaderTest {
 		assertNotNull(results);
 		Pair<Currency, Currency> expectedEURUSD = Pair.of(Currency.EUR, Currency.USD);
 		Pair<Currency, Currency> expectedEURJPY = Pair.of(Currency.JPY, Currency.EUR);
-		assertTrue(results.getConversions().containsKey(expectedEURUSD));
-		assertTrue(results.getConversions().containsKey(expectedEURJPY));
-		assertEquals(2, results.getConversions().get(expectedEURUSD));
-		assertEquals(0.5, results.getConversions().get(expectedEURJPY));
+		assertTrue(results.conversions().containsKey(expectedEURUSD));
+		assertTrue(results.conversions().containsKey(expectedEURJPY));
+		assertEquals(2, results.conversions().get(expectedEURUSD));
+		assertEquals(0.5, results.conversions().get(expectedEURJPY));
 	}
 
 	@Test
@@ -57,11 +58,20 @@ class KataCSVReaderTest {
 
 	@Test
 	void parse_clients_correctly() throws IOException {
-		KataCSVReader kataCSVReader = new KataCSVReader(PRODUCT_CSV_PATH, new ClientConverter());
+		KataCSVReader kataCSVReader = new KataCSVReader(PRODUCT_CSV_PATH, new ProductConverter());
 
 		ProductWrapper results = (ProductWrapper) kataCSVReader.read();
 
 		assertNotNull(results);
-		assertNotEquals(0, results.getClients().size());
+		assertEquals(7, results.clients().size());
+		Client expectedClient = new Client("C1");
+		assertTrue(results.clients().containsKey(expectedClient));
+		assertEquals(2, results.clients().get(expectedClient).size());
+		Product firstExpectedProduct = new Product("P1");
+		Product secondExpectedProduct = new Product("P2");
+		assertTrue(results.clients().get(expectedClient).containsKey(firstExpectedProduct));
+		assertTrue(results.clients().get(expectedClient).containsKey(secondExpectedProduct));
+		assertEquals(30, results.clients().get(expectedClient).get(firstExpectedProduct));
+		assertEquals(80, results.clients().get(expectedClient).get(secondExpectedProduct));
 	}
 }

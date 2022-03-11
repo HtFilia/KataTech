@@ -1,14 +1,8 @@
 package model.product;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import model.KataWrapper;
 
-import java.util.Set;
+import java.util.Map;
 
-@AllArgsConstructor
-@Getter
-public class ProductWrapper extends KataWrapper {
-
-	private final Set<Client> clients;
+public record ProductWrapper(Map<Client, Map<Product, Integer>> clients) implements KataWrapper {
 }
