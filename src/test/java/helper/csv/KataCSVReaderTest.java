@@ -8,7 +8,9 @@ import helper.csv.converter.PriceConverter;
 import helper.csv.converter.ProductConverter;
 import model.forex.Currency;
 import model.forex.ForexWrapper;
+import model.price.Portfolio;
 import model.price.PriceWrapper;
+import model.price.Underlying;
 import model.product.Client;
 import model.product.Product;
 import model.product.ProductWrapper;
@@ -87,5 +89,26 @@ class KataCSVReaderTest {
 		PriceWrapper results = (PriceWrapper) kataCSVReader.read();
 
 		assertNotNull(results);
+		assertEquals(2, results.prices().size());
+		Portfolio firstExpectedPortfolio = new Portfolio("PTF1");
+		Portfolio secondExpectedPortfolio = new Portfolio("PTF2");
+		assertTrue(results.prices().containsKey(firstExpectedPortfolio));
+		assertTrue(results.prices().containsKey(secondExpectedPortfolio));
+		assertEquals(2, results.prices().get(firstExpectedPortfolio).size());
+		Product firstExpectedProduct = new Product("X1");
+		Product secondExpectedProduct = new Product("X2");
+		assertTrue(results.prices().get(firstExpectedPortfolio).containsKey(firstExpectedProduct));
+		assertTrue(results.prices().get(firstExpectedPortfolio).containsKey(secondExpectedProduct));
+		assertEquals(3, results.prices().get(firstExpectedPortfolio).get(secondExpectedProduct).size());
+		Underlying firstExpectedUnderlying = new Underlying("UX21");
+		Underlying secondExpectedUnderlying = new Underlying("UX22");
+		Underlying thirdExpectedUnderlying = new Underlying("UX23");
+		assertTrue(results.prices().get(firstExpectedPortfolio).get(secondExpectedProduct).containsKey(firstExpectedUnderlying));
+		assertTrue(results.prices().get(firstExpectedPortfolio).get(secondExpectedProduct).containsKey(secondExpectedUnderlying));
+		assertTrue(results.prices().get(firstExpectedPortfolio).get(secondExpectedProduct).containsKey(thirdExpectedUnderlying));
+		assertEquals(2, results.prices().get(firstExpectedPortfolio).get(secondExpectedProduct).get(firstExpectedUnderlying).size());
+		assertTrue(results.prices().get(firstExpectedPortfolio).get(secondExpectedProduct).get(firstExpectedUnderlying).containsKey(Currency.GBP));
+		assertTrue(results.prices().get(firstExpectedPortfolio).get(secondExpectedProduct).get(firstExpectedUnderlying).containsKey(Currency.EUR));
+		assertEquals(30, results.prices().get(firstExpectedPortfolio).get(secondExpectedProduct).get(firstExpectedUnderlying).get(Currency.GBP));
 	}
 }

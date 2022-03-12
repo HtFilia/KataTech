@@ -16,17 +16,14 @@ public class ForexConverter implements IKataConverter {
 		for (String[] line : lines) {
 			Currency from = Currency.from(line[0]);
 			Currency to = Currency.from(line[1]);
-			Double fx = forexFromString(line[2]);
+			Double fx;
+			try {
+				fx = PriceReader.read(line[2]);
+			} catch (NumberFormatException ex) {
+				throw new ForexValueParsingException(line[2]);
+			}
 			conversions.put(Pair.of(from, to), fx);
 		}
 		return new ForexWrapper(conversions);
-	}
-
-	private Double forexFromString(String forex) {
-		try {
-			return Double.valueOf(forex.replace("\"", "").replace(",", "."));
-		} catch (NumberFormatException ex) {
-			throw new ForexValueParsingException(forex);
-		}
 	}
 }
