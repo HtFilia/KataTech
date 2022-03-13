@@ -40,6 +40,6 @@ class ForexWrapperTest {
 
 		Double forex = results.toEUR(Currency.USD);
 
-		assertEquals(0, forex);
+		assertEquals(1, forex);
 	}
 }

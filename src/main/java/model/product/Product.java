@@ -8,9 +8,9 @@ import java.util.Map;
 
 public record Product(String name) {
 
-	public Double price(Map<Underlying, Map<Currency, Double>> underlyings, ForexWrapper fxSpots) {
-		return underlyings.values().stream().mapToDouble(
-				composition -> composition.entrySet().stream().mapToDouble(
+	public double price(Map<Underlying, Map<Currency, Double>> composition, ForexWrapper fxSpots) {
+		return composition.values().stream().mapToDouble(
+				fxPrice -> fxPrice.entrySet().stream().mapToDouble(
 						fxValue -> fxSpots.toEUR(fxValue.getKey()) * fxValue.getValue()
 				).min().orElse(0d))
 				.sum();
