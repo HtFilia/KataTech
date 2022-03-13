@@ -16,6 +16,7 @@ public final class ConsistencyChecker {
 
 	public static void checkConsistency(ForexWrapper forexWrapper, ProductWrapper productWrapper, PriceWrapper priceWrapper) {
 		checkCurrencyPairs(forexWrapper);
+		checkCurrenciesCovered(forexWrapper, priceWrapper);
 	}
 
 	static void checkCurrencyPairs(ForexWrapper forexWrapper) {
@@ -26,6 +27,15 @@ public final class ConsistencyChecker {
 					&& !forexWrapper.conversions().containsKey(Pair.of(Currency.EUR, currency))) {
 				throw new CurrencyNotLinkedToEurException(currency);
 			}
+		}
+	}
+
+	static void checkCurrenciesCovered(ForexWrapper forexWrapper, PriceWrapper priceWrapper) {
+		Set<Currency> availableCurrencies = forexWrapper.currencies();
+		Set<Currency> currencies = priceWrapper.currencies();
+		currencies.removeAll(availableCurrencies);
+		if (!currencies.isEmpty()) {
+			throw new CurrencyNotLinkedToEurException(currencies);
 		}
 	}
 }
