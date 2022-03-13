@@ -1,11 +1,13 @@
 package helper.csv.checker;
 
 import exception.csv.consistency.CurrencyNotLinkedToEurException;
+import exception.csv.consistency.ProductNotDefinedException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import model.forex.Currency;
 import model.forex.ForexWrapper;
 import model.price.PriceWrapper;
+import model.product.Product;
 import model.product.ProductWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -17,6 +19,7 @@ public final class ConsistencyChecker {
 	public static void checkConsistency(ForexWrapper forexWrapper, ProductWrapper productWrapper, PriceWrapper priceWrapper) {
 		checkCurrencyPairs(forexWrapper);
 		checkCurrenciesCovered(forexWrapper, priceWrapper);
+		checkProducts(productWrapper, priceWrapper);
 	}
 
 	static void checkCurrencyPairs(ForexWrapper forexWrapper) {
@@ -36,6 +39,15 @@ public final class ConsistencyChecker {
 		currencies.removeAll(availableCurrencies);
 		if (!currencies.isEmpty()) {
 			throw new CurrencyNotLinkedToEurException(currencies);
+		}
+	}
+
+	static void checkProducts(ProductWrapper productWrapper, PriceWrapper priceWrapper) {
+		Set<Product> availableProducts = priceWrapper.products();
+		Set<Product> products = productWrapper.products();
+		products.removeAll(availableProducts);
+		if (!products.isEmpty()) {
+			throw new ProductNotDefinedException(products);
 		}
 	}
 }

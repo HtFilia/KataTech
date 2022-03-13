@@ -1,15 +1,18 @@
 package helper.csv.checker;
 
 import exception.csv.consistency.CurrencyNotLinkedToEurException;
+import exception.csv.consistency.ProductNotDefinedException;
 import model.forex.Currency;
 import model.forex.ForexWrapper;
 import model.price.PriceWrapper;
+import model.product.ProductWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static fixtures.ClientFixture.aClient;
 import static fixtures.PortfolioFixture.aPortfolio;
 import static fixtures.ProductFixture.aProduct;
 import static fixtures.UnderlyingFixture.anUnderlying;
@@ -131,5 +134,61 @@ class ConsistencyCheckerTest {
 				() -> ConsistencyChecker.checkCurrenciesCovered(forexWrapper, priceWrapper));
 
 		assertEquals(new CurrencyNotLinkedToEurException(Currency.TND, Currency.CHF).getMessage(), exception.getMessage());
+	}
+
+	@Test
+	void check_products_consistency() {
+		ProductWrapper productWrapper = new ProductWrapper(Map.of(
+				aClient(), Map.of(
+						aProduct(), 1
+				),
+				aClient("C2"), Map.of(
+						aProduct("P2"), 1
+				)
+		));
+		PriceWrapper priceWrapper = new PriceWrapper(Map.of(
+				aPortfolio(), Map.of(
+						aProduct(), Map.of(
+								anUnderlying(), Map.of(
+										Currency.USD, 1d
+								)
+						),
+						aProduct("P2"), Map.of(
+								anUnderlying(), Map.of(
+										Currency.USD, 1d
+								)
+						),
+						aProduct("P3"), Map.of(
+								anUnderlying(), Map.of(
+										Currency.USD, 1d
+								)
+						)
+				)
+		));
+
+		ConsistencyChecker.checkProducts(productWrapper, priceWrapper);
+	}
+
+	@Test
+	void check_not_defined_product() {
+		ProductWrapper productWrapper = new ProductWrapper(Map.of(
+				aClient(), Map.of(
+						aProduct(), 1
+				)
+		));
+		PriceWrapper priceWrapper = new PriceWrapper(Map.of(
+				aPortfolio(), Map.of(
+						aProduct("P2"), Map.of(
+								anUnderlying(), Map.of(
+										Currency.USD, 1d
+								)
+						)
+				)
+		));
+
+		Throwable exception = assertThrows(ProductNotDefinedException.class,
+				() -> ConsistencyChecker.checkProducts(productWrapper, priceWrapper));
+
+		assertEquals(new ProductNotDefinedException(aProduct()).getMessage(), exception.getMessage());
 	}
 }
