@@ -1,3 +1,5 @@
 Currency,Currency,Value
 EUR,USD,2
 JPY,EUR,"0,5"
+EUR,TND,1
+EUR,GBP,1

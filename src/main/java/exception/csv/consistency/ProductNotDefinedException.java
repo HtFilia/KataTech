@@ -28,7 +28,7 @@ public class ProductNotDefinedException extends CSVParsingException {
 
 	@Override
 	public String getMessage() {
-		return StringUtils.join(productNames(), ", ") + "isn't/aren't defined.";
+		return StringUtils.join(productNames(), ", ") + " isn't/aren't defined.";
 	}
 
 	private String[] productNames() {

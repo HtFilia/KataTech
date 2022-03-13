@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ConsistencyChecker {
 
-	public static void checkConsistency(ForexWrapper forexWrapper, ProductWrapper productWrapper, PriceWrapper priceWrapper) {
+	public static void check(ForexWrapper forexWrapper, ProductWrapper productWrapper, PriceWrapper priceWrapper) {
 		checkCurrencyPairs(forexWrapper);
 		checkCurrenciesCovered(forexWrapper, priceWrapper);
 		checkProducts(productWrapper, priceWrapper);

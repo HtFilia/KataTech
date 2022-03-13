@@ -2,6 +2,11 @@ package helper.csv.checker;
 
 import exception.csv.consistency.CurrencyNotLinkedToEurException;
 import exception.csv.consistency.ProductNotDefinedException;
+import helper.Constants;
+import helper.csv.KataCSVReader;
+import helper.csv.converter.ForexConverter;
+import helper.csv.converter.PriceConverter;
+import helper.csv.converter.ProductConverter;
 import model.forex.Currency;
 import model.forex.ForexWrapper;
 import model.price.PriceWrapper;
@@ -9,6 +14,7 @@ import model.product.ProductWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ConsistencyCheckerTest {
+
+	private static final String FOREX_CSV_PATH = Constants.TEST_RESOURCES_PATH + Constants.FOREX_CSV;
+	private static final String PRODUCT_CSV_PATH = Constants.TEST_RESOURCES_PATH + Constants.PRODUCT_CSV;
+	private static final String PRICE_CSV_PATH = Constants.TEST_RESOURCES_PATH + Constants.PRICES_CSV;
+
 
 	@Test
 	void check_no_currency_in_forex_wrapper() {
@@ -190,5 +201,42 @@ class ConsistencyCheckerTest {
 				() -> ConsistencyChecker.checkProducts(productWrapper, priceWrapper));
 
 		assertEquals(new ProductNotDefinedException(aProduct()).getMessage(), exception.getMessage());
+
+	}
+
+	@Test
+	void check_not_defined_products() {
+		ProductWrapper productWrapper = new ProductWrapper(Map.of(
+				aClient(), Map.of(
+						aProduct(), 1,
+						aProduct("P2"), 1
+				)
+		));
+		PriceWrapper priceWrapper = new PriceWrapper(Map.of(
+				aPortfolio(), Map.of(
+						aProduct("P3"), Map.of(
+								anUnderlying(), Map.of(
+										Currency.USD, 1d
+								)
+						)
+				)
+		));
+
+		Throwable exception = assertThrows(ProductNotDefinedException.class,
+				() -> ConsistencyChecker.checkProducts(productWrapper, priceWrapper));
+
+		assertEquals(new ProductNotDefinedException(aProduct(), aProduct("P2")).getMessage(), exception.getMessage());
+	}
+
+	@Test
+	void check_all() throws IOException {
+		KataCSVReader forexReader = new KataCSVReader(FOREX_CSV_PATH, new ForexConverter());
+		KataCSVReader productReader = new KataCSVReader(PRODUCT_CSV_PATH, new ProductConverter());
+		KataCSVReader priceReader = new KataCSVReader(PRICE_CSV_PATH, new PriceConverter());
+		ForexWrapper forexWrapper = (ForexWrapper) forexReader.read();
+		ProductWrapper productWrapper = (ProductWrapper) productReader.read();
+		PriceWrapper priceWrapper = (PriceWrapper) priceReader.read();
+
+		ConsistencyChecker.check(forexWrapper, productWrapper, priceWrapper);
 	}
 }
