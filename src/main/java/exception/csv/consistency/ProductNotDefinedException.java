@@ -1,6 +1,7 @@
 package exception.csv.consistency;
 
 import exception.csv.CSVParsingException;
+import helper.Utilities;
 import lombok.AllArgsConstructor;
 import model.product.Product;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +29,7 @@ public class ProductNotDefinedException extends CSVParsingException {
 
 	@Override
 	public String getMessage() {
-		return StringUtils.join(productNames(), ", ") + " isn't/aren't defined.";
+		return StringUtils.join(productNames(), ", ") + Utilities.pluralizeIsIfNeeded(products.size() > 1, true) + " defined.";
 	}
 
 	private String[] productNames() {

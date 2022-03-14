@@ -1,6 +1,7 @@
 package exception.csv.consistency;
 
 import exception.csv.CSVParsingException;
+import helper.Utilities;
 import lombok.AllArgsConstructor;
 import model.forex.Currency;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +29,7 @@ public class CurrencyNotLinkedToEurException extends CSVParsingException {
 
 	@Override
 	public String getMessage() {
-		return StringUtils.join(currencyNames(), ", ") + " doesn't/don't have an exchange rate with EUR.";
+		return StringUtils.join(currencyNames(), ", ") + Utilities.pluralizeDoIfNeeded(currencies.size() > 1, true) + " have an exchange rate with EUR.";
 	}
 
 	private String[] currencyNames() {
