@@ -21,4 +21,7 @@ public final class Constants {
 	public static final String FOREX_CSV = "/Forex.csv";
 	public static final String PRICES_CSV = "/Prices.csv";
 	public static final String PRODUCT_CSV = "/Product.csv";
+
+	public static final String REPORTING_PORTFOLIO_CSV = "/Reporting-portfolio.csv";
+	public static final String REPORTING_CLIENT_CSV = "/Reporting-client.csv";
 }
