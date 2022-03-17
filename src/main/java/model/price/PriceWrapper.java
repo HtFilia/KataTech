@@ -7,6 +7,7 @@ import model.product.Product;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public record PriceWrapper(
 		Map<Portfolio, Map<Product, Map<Underlying, Map<Currency, Double>>>> prices) implements KataWrapper {
@@ -18,7 +19,7 @@ public record PriceWrapper(
 		}
 		return products;
 	}
-	
+
 	public Set<Currency> currencies() {
 		Set<Currency> currencies = new HashSet<>();
 		for (Map<Product, Map<Underlying, Map<Currency, Double>>> products : prices.values()) {
@@ -29,5 +30,11 @@ public record PriceWrapper(
 			}
 		}
 		return currencies;
+	}
+
+	public Map<Product, Map<Underlying, Map<Currency, Double>>> compositions() {
+		return prices.values().stream()
+				.flatMap(composition -> composition.entrySet().stream())
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 }
