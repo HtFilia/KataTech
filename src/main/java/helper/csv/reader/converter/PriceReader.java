@@ -1,4 +1,4 @@
-package helper.csv.converter;
+package helper.csv.reader.converter;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

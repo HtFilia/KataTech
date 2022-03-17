@@ -1,8 +1,8 @@
 package model.forex;
 
 import helper.Constants;
-import helper.csv.KataCSVReader;
-import helper.csv.converter.ForexConverter;
+import helper.csv.reader.KataCSVReader;
+import helper.csv.reader.converter.ForexConverter;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

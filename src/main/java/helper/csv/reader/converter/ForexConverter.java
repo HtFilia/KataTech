@@ -1,4 +1,4 @@
-package helper.csv.converter;
+package helper.csv.reader.converter;
 
 import exception.csv.forex.ForexValueParsingException;
 import model.forex.Currency;

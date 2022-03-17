@@ -1,10 +1,10 @@
 package model.product;
 
 import helper.Constants;
-import helper.csv.KataCSVReader;
-import helper.csv.converter.ForexConverter;
-import helper.csv.converter.PriceConverter;
-import helper.csv.converter.ProductConverter;
+import helper.csv.reader.KataCSVReader;
+import helper.csv.reader.converter.ForexConverter;
+import helper.csv.reader.converter.PriceConverter;
+import helper.csv.reader.converter.ProductConverter;
 import model.forex.ForexWrapper;
 import model.price.PriceWrapper;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
-package helper.csv;
+package helper.csv.reader;
 
 import com.opencsv.CSVReader;
-import helper.csv.converter.IKataConverter;
+import helper.csv.reader.converter.IKataConverter;
 import model.KataWrapper;
 
 import java.io.IOException;
